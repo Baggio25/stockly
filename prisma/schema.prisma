@@ -5,12 +5,12 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Product {
@@ -24,21 +24,22 @@ model Product {
 }
 
 model Sale {
-  id           String        @id @default(uuid())
-  date         DateTime
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  saleProducts SaleProduct[]
+  id        String        @id @default(uuid())
+  date      DateTime
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  products  SaleProduct[]
 }
 
 model SaleProduct {
   id        String   @id @default(uuid())
   saleId    String
-  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   unitPrice Decimal  @db.Decimal(10, 2)
   quantity  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  sale    Sale    @relation(fields: [saleId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }
