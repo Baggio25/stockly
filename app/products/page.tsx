@@ -1,10 +1,12 @@
 import LayoutList from "../_components/layout-list";
 import { DataTable } from "../_components/ui/data-table";
-import { db } from "../_lib/prisma";
+import { getProducts } from "../_data-access/product/get-products";
+
 import { productTableColumns } from "./_components/table-columns";
 
 const ProductsPage = async () => {
-  const products = await db.product.findMany({});
+  const products = await getProducts();
+
   return (
     <LayoutList
       tituloSpan="Produtos"
