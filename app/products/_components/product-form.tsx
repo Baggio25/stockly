@@ -76,16 +76,16 @@ export const ProductForm = ({ onSuccess }: ProductFormProps) => {
               <FormLabel>Preço</FormLabel>
               <FormControl>
                 <NumericFormat
+                  value={field.value}
                   thousandSeparator="."
                   decimalSeparator=","
-                  fixedDecimalScale
                   decimalScale={2}
                   prefix="R$"
                   allowNegative={false}
                   customInput={Input}
-                  onValueChange={(values) => field.onChange(values.floatValue)}
-                  {...field}
-                  onChange={() => {}}
+                  onValueChange={(values) => {
+                    field.onChange(values.floatValue ?? 0);
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -101,15 +101,15 @@ export const ProductForm = ({ onSuccess }: ProductFormProps) => {
               <FormLabel>Estoque</FormLabel>
               <FormControl>
                 <NumericFormat
+                  value={field.value}
                   thousandSeparator="."
                   decimalSeparator=","
-                  fixedDecimalScale={false}
                   decimalScale={0}
                   allowNegative={false}
                   customInput={Input}
-                  onValueChange={(values) => field.onChange(values.value)}
-                  {...field}
-                  onChange={() => {}}
+                  onValueChange={(values) => {
+                    field.onChange(values.floatValue ?? 0);
+                  }}
                 />
               </FormControl>
               <FormMessage />
