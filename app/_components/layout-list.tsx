@@ -1,11 +1,24 @@
 import { PlusIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 
 interface ILayoutList {
   tituloSpan: string;
   tituloH2: string;
   labelBotao: string;
+  dialogTitle: string;
+  dialogDescription?: string;
+  dialogContent: React.ReactNode;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
 }
 
@@ -13,6 +26,11 @@ const LayoutList = ({
   tituloSpan,
   tituloH2,
   labelBotao,
+  dialogTitle,
+  dialogDescription = "Insira as informações de cadastro",
+  dialogContent,
+  open,
+  onOpenChange,
   children,
 }: ILayoutList) => {
   return (
@@ -24,10 +42,22 @@ const LayoutList = ({
           </span>
           <h2 className="text-xl font-semibold text-slate-500">{tituloH2}</h2>
         </div>
-        <Button className="gap-2 bg-green-600 hover:bg-slate-500">
-          <PlusIcon size={20} />
-          {labelBotao}
-        </Button>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+          <DialogTrigger asChild>
+            <Button className="gap-2 bg-green-600 hover:bg-slate-500">
+              <PlusIcon size={20} />
+              {labelBotao}
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>{dialogTitle}</DialogTitle>
+              <DialogDescription>{dialogDescription}</DialogDescription>
+            </DialogHeader>
+            {dialogContent}
+          </DialogContent>
+        </Dialog>
       </div>
 
       {children}
