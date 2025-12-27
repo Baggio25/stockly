@@ -1,3 +1,8 @@
+import { createProduct } from "@/app/_actions/product/create-product";
+import {
+  createProductSchema,
+  CreateProductSchema,
+} from "@/app/_actions/product/create-product/schema";
 import { Button } from "@/app/_components/ui/button";
 import {
   Form,
@@ -10,40 +15,27 @@ import {
 import { Input } from "@/app/_components/ui/input";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
-
-import { z } from "zod";
-
-const formSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, { message: "O nome do produto é obrigatório" }),
-  price: z.number().min(0.01, { message: "O preço do produto é obrigatório" }),
-  stock: z.coerce.number().int().min(0, {
-    message: "A quantidade em estoque é obrigatória.",
-  }),
-});
 
 interface ProductFormProps {
   onSuccess: () => void;
 }
 
-type FormSchema = z.infer<typeof formSchema>;
-
 export const ProductForm = ({ onSuccess }: ProductFormProps) => {
-  const form = useForm<FormSchema>({
+  const form = useForm<CreateProductSchema>({
     shouldUnregister: true,
-    resolver: zodResolver(formSchema),
-    defaultValues: { name: "", price: 0, stock: 1 },
+    resolver: zodResolver(createProductSchema),
+    defaultValues: { name: "", price: 0.0, stock: 1 },
   });
 
-  const handleSubmit = (data: FormSchema) => {
-    // 🔹 salvar produto (API / server action)
-    console.log("Produto salvo", data);
-
-    // 🔹 fecha o dialog
+  const handleSubmit = async (data: CreateProductSchema) => {
+    try {
+      await createProduct(data);
+    } catch (error) {
+      console.error(error);
+    }
     onSuccess();
   };
 
@@ -76,11 +68,11 @@ export const ProductForm = ({ onSuccess }: ProductFormProps) => {
               <FormLabel>Preço</FormLabel>
               <FormControl>
                 <NumericFormat
-                  value={field.value}
+                  value={field.value ?? 0}
                   thousandSeparator="."
                   decimalSeparator=","
                   decimalScale={2}
-                  prefix="R$"
+                  fixedDecimalScale
                   allowNegative={false}
                   customInput={Input}
                   onValueChange={(values) => {
@@ -122,8 +114,15 @@ export const ProductForm = ({ onSuccess }: ProductFormProps) => {
             Cancelar
           </Button>
 
-          <Button type="submit" className="bg-green-600 hover:bg-green-700">
-            Salvar
+          <Button
+            type="submit"
+            disabled={form.formState.isSubmitting}
+            className="gap-1.5 bg-green-600 hover:bg-green-700"
+          >
+            {form.formState.isSubmitting && (
+              <Loader2Icon className="animate-spin" size={18} />
+            )}
+            <span>Salvar</span>
           </Button>
         </div>
       </form>
