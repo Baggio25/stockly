@@ -1,11 +1,19 @@
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 
-import { PlusIcon } from "lucide-react";
-import { productTableColumns } from "./_components/table-column";
 import { getProducts } from "@/app/_data-access/product/get-products";
+import { productTableColumns } from "./_components/table-column";
+import AddProductButton from "./_components/add-product-button";
 
 const ProductsPage = async () => {
+  {
+    /**
+    Ex. com rota:
+
+    const response = await fetch("http://localhost:3000/api/products");
+    const products = response.json();
+  */
+  }
+
   const products = await getProducts();
 
   return (
@@ -15,15 +23,14 @@ const ProductsPage = async () => {
           <span className="text-sm font-semibold text-green-600">Produtos</span>
           <h2 className="text-2xl font-semibold">Gestão de produtos</h2>
         </div>
-
-        <Button className="gap-2 bg-green-700">
-          <PlusIcon size={20} />
-          Novo produto
-        </Button>
+        <AddProductButton />
       </div>
 
       <div className="">
-        <DataTable columns={productTableColumns} data={products} />
+        <DataTable
+          columns={productTableColumns}
+          data={JSON.parse(JSON.stringify(products))}
+        />
       </div>
     </div>
   );
