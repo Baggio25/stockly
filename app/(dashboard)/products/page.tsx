@@ -2,7 +2,8 @@ import { DataTable } from "@/components/ui/data-table";
 
 import { getProducts } from "@/app/_data-access/product/get-products";
 import { productTableColumns } from "./_components/table-column";
-import AddProductButton from "./_components/add-product-button";
+import CreateProductButton from "./_components/create-product-button";
+
 
 const ProductsPage = async () => {
   {
@@ -23,7 +24,7 @@ const ProductsPage = async () => {
           <span className="text-sm font-semibold text-green-600">Produtos</span>
           <h2 className="text-2xl font-semibold">Gestão de produtos</h2>
         </div>
-        <AddProductButton />
+        <CreateProductButton />
       </div>
 
       <div className="">

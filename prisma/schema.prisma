@@ -19,7 +19,7 @@ model Product {
   price        Decimal       @db.Decimal(10, 2)
   stock        Int
   createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @map("updated_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
   saleProducts SaleProduct[]
 
   @@map("products")
@@ -29,7 +29,7 @@ model Sale {
   id        String        @id @default(uuid())
   date      DateTime
   createdAt DateTime      @default(now()) @map("created_at")
-  updatedAt DateTime      @map("updated_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
   products  SaleProduct[]
 
   @@map("sales")
@@ -42,7 +42,7 @@ model SaleProduct {
   unitPrice Decimal  @map("unit_price") @db.Decimal(10, 2)
   quantity  Int
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   sale    Sale    @relation(fields: [saleId], references: [id])
   product Product @relation(fields: [productId], references: [id])
